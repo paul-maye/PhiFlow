@@ -22,7 +22,16 @@ class FieldEmbedding(Extrapolation):
         return self.field.shape
 
     def to_dict(self) -> dict:
-        raise NotImplementedError("FieldEmbedding cannot be converted to dict")
+        # raise NotImplementedError("FieldEmbedding cannot be converted to dict")
+        return {
+            'type': 'field',
+            'tensor': math._tensors.to_dict(self.field.values),
+            'boundary': self.field.boundary,
+            'bounds': {k: math._tensors.to_dict(v) for k, v in self.field.bounds.__dict__.items()},
+            'resolution': math._shape.to_dict(self.field.resolution),
+            'extrapolation': self.field.extrapolation,
+            'shape': math._shape.to_dict(self.field.shape),  
+        }
 
     def __value_attrs__(self):
         return 'field',
